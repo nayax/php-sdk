@@ -6,17 +6,15 @@ require __DIR__ . '/../vendor/autoload.php';
 
 $adapter = new Adapter();
 
+// to get redirect url $redirectUrl
 $redirectUrl = $adapter->initiatePayment([
    'amount' => 1.23,
    'currency' => 'ACP',
    'orderId' => uniqid(),
    'methodCode' => 'visa',
-   'fullName' => 'webdev',
    'redirectUrl' => '{{ your redirect page}}',
    'notificationUrl' => '{{ your notification page}}',
 ]);
-
-// to get redirect url var_dump($redirectUrl);
 
 // to handle notification
 // choose either one
