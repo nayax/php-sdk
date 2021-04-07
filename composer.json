@@ -1,0 +1,19 @@
+{
+   "name": "nayax/php-sdk",
+   "description": "Nayax API integration via php",
+   "type": "library",
+   "authors": [
+      {
+         "name": "Serjo Agronov",
+         "email": "serjoagronovdev@gmail.com"
+      }
+   ],
+   "autoload": {
+      "psr-4": {
+         "Nayax\\": "src/Nayax/"
+      }
+   },
+   "require": {
+      "guzzlehttp/guzzle": "^7.3"
+   }
+}
