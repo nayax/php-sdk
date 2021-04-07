@@ -12,9 +12,8 @@ $redirectUrl = $adapter->initiatePayment([
    'orderId' => uniqid(),
    'methodCode' => 'visa',
    'fullName' => 'webdev',
-   'email' => 'webdev@gmail.com',
-   'redirectUrl' => 'https://ae3132ca8a3a.ngrok.io/thank-you',
-   'notificationUrl' => 'https://ae3132ca8a3a.ngrok.io/server.php',
+   'redirectUrl' => '{{ your redirect page}}',
+   'notificationUrl' => '{{ your notification page}}',
 ]);
 
 var_dump($redirectUrl);
