@@ -6,8 +6,8 @@ class Adapter {
 
    const API_URL = 'https://uiservices.ecom.nayax.com/hosted/';
 
-   const MERCHANT_ID = '5787743';
-   const HASH_CODE = 'YWVGU8GM4L';
+   const MERCHANT_ID = '{{ merchantId}}';
+   const HASH_CODE = '{{ your hash code}}';
 
    const STATUS_SUCCESS = 'success';
    const STATUS_ERROR = 'error';
@@ -21,12 +21,6 @@ class Adapter {
          'trans_installments' => 1,
          'trans_refNum' => $transaction['orderId'],
          'disp_paymentType' => 'CC',
-//         'client_fullName' => $transaction['fullName'],
-//         'client_email' => $transaction['email'],
-//         'client_billAddress1' => $transaction['address'],
-//         'client_billZipcode' => $transaction['zipCode'],
-//         'client_billCountry' => $transaction['country'],
-//         'client_billCity' => $transaction['city'],
          'url_redirect' => $transaction['redirectUrl'],
          'url_notify' => $transaction['notificationUrl'],
       ];
@@ -44,12 +38,6 @@ class Adapter {
          $transaction['trans_currency'] .
          $transaction['trans_type'] .
          $transaction['disp_paymentType'] .
-//         $transaction['client_fullName'] .
-//         $transaction['client_email'] .
-//         $transaction['client_billAddress1'] .
-//         $transaction['client_billZipcode'] .
-//         $transaction['client_billCountry'] .
-//         $transaction['client_billCity'] .
          $transaction['url_notify'] .
          $transaction['url_redirect'] . self::HASH_CODE;
 
