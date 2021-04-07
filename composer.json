@@ -12,8 +12,5 @@
       "psr-4": {
          "Nayax\\": "src/Nayax/"
       }
-   },
-   "require": {
-      "guzzlehttp/guzzle": "^7.3"
    }
 }
