@@ -55,12 +55,6 @@ class Adapter {
       $redirectUrl .= '&trans_currency=' . $transaction['trans_currency'];
       $redirectUrl .= '&trans_type=' . $transaction['trans_type'];
       $redirectUrl .= '&disp_paymentType=' . $transaction['disp_paymentType'];
-//      $redirectUrl .= '&client_fullName=' . urlencode($transaction['client_fullName']);
-//      $redirectUrl .= '&client_email=' . $transaction['client_email'];
-//      $redirectUrl .= '&client_billAddress1=' . urlencode($transaction['client_billAddress1']);
-//      $redirectUrl .= '&client_billZipcode=' . urlencode($transaction['client_billZipcode']);
-//      $redirectUrl .= '&client_billCountry=' . urlencode($transaction['client_billCountry']);
-//      $redirectUrl .= '&client_billCity=' . urlencode($transaction['client_billCity']);
       $redirectUrl .= '&url_notify=' . urlencode($transaction['url_notify']);
       $redirectUrl .= '&url_redirect=' . urlencode($transaction['url_redirect']);
       $redirectUrl .= '&signature=' . $transaction['signature'];

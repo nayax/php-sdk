@@ -16,4 +16,9 @@ $redirectUrl = $adapter->initiatePayment([
    'notificationUrl' => '{{ your notification page}}',
 ]);
 
-var_dump($redirectUrl);
+// to get redirect url var_dump($redirectUrl);
+
+// to handle notification
+// choose either one
+$transaction = $adapter->handleNotification($_GET);
+$transaction = $adapter->handleNotification($_POST);
