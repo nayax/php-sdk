@@ -27,7 +27,7 @@ class Adapter {
          'trans_refNum' => $transaction['orderId'],
          'disp_paymentType' => 'CC',
          'url_redirect' => $transaction['redirectUrl'],
-         'url_notify' => $transaction['notificationUrl'],
+         'notification_url' => $transaction['notificationUrl'],
       ];
 
       $transactionDetails['signature'] = $this->createSignature($transactionDetails);
@@ -43,7 +43,7 @@ class Adapter {
          $transaction['trans_currency'] .
          $transaction['trans_type'] .
          $transaction['disp_paymentType'] .
-         $transaction['url_notify'] .
+         $transaction['notification_url'] .
          $transaction['url_redirect'] .
          $this->hashCode;
 
@@ -61,7 +61,7 @@ class Adapter {
       $redirectUrl .= '&trans_currency=' . $transaction['trans_currency'];
       $redirectUrl .= '&trans_type=' . $transaction['trans_type'];
       $redirectUrl .= '&disp_paymentType=' . $transaction['disp_paymentType'];
-      $redirectUrl .= '&url_notify=' . urlencode($transaction['url_notify']);
+      $redirectUrl .= '&notification_url=' . urlencode($transaction['notification_url']);
       $redirectUrl .= '&url_redirect=' . urlencode($transaction['url_redirect']);
       $redirectUrl .= '&signature=' . $transaction['signature'];
 
