@@ -6,15 +6,20 @@ class Adapter {
 
    const API_URL = 'https://uiservices.ecom.nayax.com/hosted/';
 
-   const MERCHANT_ID = '{{ merchantId}}';
-   const HASH_CODE = '{{ your hash code}}';
-
    const STATUS_SUCCESS = 'success';
    const STATUS_ERROR = 'error';
 
+   private $merchantId;
+   private $hashCode;
+
+   public function __construct($merchantId, $hashCode) {
+      $this->merchantId = $merchantId;
+      $this->hashCode = $hashCode;
+   }
+
    public function initiatePayment($transaction) {
       $transactionDetails = [
-         'merchantID' => self::MERCHANT_ID,
+         'merchantID' => $this->merchantId,
          'trans_amount' => $transaction['amount'],
          'trans_currency' => $transaction['currency'],
          'trans_type' => 0, // debit transaction
@@ -39,7 +44,8 @@ class Adapter {
          $transaction['trans_type'] .
          $transaction['disp_paymentType'] .
          $transaction['url_notify'] .
-         $transaction['url_redirect'] . self::HASH_CODE;
+         $transaction['url_redirect'] .
+         $this->hashCode;
 
       return urlencode(base64_encode(hash("sha256", $concatenatedString, true)));
    }
@@ -48,7 +54,7 @@ class Adapter {
       $apiUrl = self::API_URL;
 
       $redirectUrl = $apiUrl;
-      $redirectUrl .= '?merchantID=' . self::MERCHANT_ID;
+      $redirectUrl .= '?merchantID=' . $this->merchantId;
       $redirectUrl .= '&trans_refNum=' . $transaction['trans_refNum'];
       $redirectUrl .= '&trans_installments=' . $transaction['trans_installments'];
       $redirectUrl .= '&trans_amount=' . $transaction['trans_amount'];

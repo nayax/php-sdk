@@ -4,7 +4,10 @@ use Nayax\Adapter;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$adapter = new Adapter();
+$merchantId = '';
+$hashCode = '';
+
+$adapter = new Adapter($merchantId, $hashCode);
 
 // to get redirect url $redirectUrl
 $redirectUrl = $adapter->initiatePayment([
