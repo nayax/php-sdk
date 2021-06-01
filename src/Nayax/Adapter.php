@@ -42,6 +42,7 @@ class Adapter {
          $transactionDetails['disp_recurring'] = 1;
          $transactionDetails['trans_recurringType'] = 0;
          $transactionDetails['trans_recurring1'] = '99M1';
+         $transactionDetails['trans_installments'] = 1;
       }
 
       $transactionDetails['signature'] = $this->createSignature($transactionDetails);
