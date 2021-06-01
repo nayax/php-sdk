@@ -6,6 +6,9 @@ class Adapter {
 
    const API_URL = 'https://uiservices.ecom.nayax.com/hosted/';
 
+   const ONE_TIME_PAYMENT = 'one_time';
+   const RECURRING_PAYMENT = 'recurring';
+
    const STATUS_SUCCESS = 'success';
    const STATUS_ERROR = 'error';
 
@@ -18,17 +21,28 @@ class Adapter {
    }
 
    public function initiatePayment($transaction) {
+      $paymentType = $transaction['paymentType'];
+
       $transactionDetails = [
          'merchantID' => $this->merchantId,
          'trans_amount' => $transaction['amount'],
          'trans_currency' => $transaction['currency'],
-         'trans_type' => 0, // debit transaction
-         'trans_installments' => 1,
+         'trans_type' => 0,
+         'trans_installments' => $transaction['installments'],
          'trans_refNum' => $transaction['orderId'],
          'disp_paymentType' => 'CC',
          'url_redirect' => $transaction['redirectUrl'],
          'notification_url' => $transaction['notificationUrl'],
+         'client_fullName' => $transaction['name'],
+         'disp_payFor' => $transaction['description'],
+         'trans_comment' => $transaction['description'],
       ];
+
+      if ($paymentType === self::RECURRING_PAYMENT) {
+         $transactionDetails['disp_recurring'] = 1;
+         $transactionDetails['trans_recurringType'] = 0;
+         $transactionDetails['trans_recurring1'] = '99M1';
+      }
 
       $transactionDetails['signature'] = $this->createSignature($transactionDetails);
       return $this->getRedirectUrl($transactionDetails);
@@ -45,6 +59,12 @@ class Adapter {
          $transaction['disp_paymentType'] .
          $transaction['notification_url'] .
          $transaction['url_redirect'] .
+         $transaction['client_fullName'] .
+         $transaction['disp_payFor'] .
+         $transaction['trans_comment'] .
+         (isset($transaction['disp_recurring']) ? $transaction['disp_recurring'] : '') .
+         (isset($transaction['trans_recurringType']) ? $transaction['trans_recurringType'] : '') .
+         (isset($transaction['trans_recurring1']) ? $transaction['trans_recurring1'] : '') .
          $this->hashCode;
 
       return urlencode(base64_encode(hash("sha256", $concatenatedString, true)));
@@ -63,6 +83,17 @@ class Adapter {
       $redirectUrl .= '&disp_paymentType=' . $transaction['disp_paymentType'];
       $redirectUrl .= '&notification_url=' . urlencode($transaction['notification_url']);
       $redirectUrl .= '&url_redirect=' . urlencode($transaction['url_redirect']);
+      $redirectUrl .= '&client_fullName=' . $transaction['client_fullName'];
+      $redirectUrl .= '&disp_payFor=' . $transaction['disp_payFor'];
+      $redirectUrl .= '&trans_comment=' . $transaction['trans_comment'];
+
+      if (isset($transaction['trans_recurringType'])) {
+         $redirectUrl .= '&disp_recurring=' . $transaction['disp_recurring'];
+         $redirectUrl .= '&trans_recurringType=' . $transaction['trans_recurringType'];
+         $redirectUrl .= '&trans_recurring1=' . $transaction['trans_recurring1'];
+
+      }
+
       $redirectUrl .= '&signature=' . $transaction['signature'];
 
       return $redirectUrl;
