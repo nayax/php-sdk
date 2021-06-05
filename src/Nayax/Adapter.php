@@ -32,7 +32,6 @@ class Adapter {
          'trans_refNum' => $transaction['orderId'],
          'disp_paymentType' => 'CC',
          'url_redirect' => $transaction['redirectUrl'],
-         'notification_url' => $transaction['notificationUrl'],
          'client_fullName' => $transaction['name'],
          'disp_payFor' => $transaction['description'],
          'trans_comment' => $transaction['description'],
@@ -43,6 +42,10 @@ class Adapter {
          $transactionDetails['trans_recurringType'] = 0;
          $transactionDetails['trans_recurring1'] = '99M1';
          $transactionDetails['trans_installments'] = 1;
+      }
+
+      if (isset($transaction['notificationUrl'])) {
+         $transactionDetails['notification_url'] = $transaction['notificationUrl'];
       }
 
       $transactionDetails['signature'] = $this->createSignature($transactionDetails);
@@ -58,15 +61,28 @@ class Adapter {
          $transaction['trans_currency'] .
          $transaction['trans_type'] .
          $transaction['disp_paymentType'] .
-         $transaction['notification_url'] .
          $transaction['url_redirect'] .
          $transaction['client_fullName'] .
          $transaction['disp_payFor'] .
-         $transaction['trans_comment'] .
-         (isset($transaction['disp_recurring']) ? $transaction['disp_recurring'] : '') .
-         (isset($transaction['trans_recurringType']) ? $transaction['trans_recurringType'] : '') .
-         (isset($transaction['trans_recurring1']) ? $transaction['trans_recurring1'] : '') .
-         $this->hashCode;
+         $transaction['trans_comment'];
+
+      if (isset($transaction['notification_url'])) {
+         $concatenatedString .= $transaction['notification_url'];
+      }
+
+      if (isset($transaction['disp_recurring'])) {
+         $concatenatedString .= $transaction['disp_recurring'];
+      }
+
+      if (isset($transaction['trans_recurringType'])) {
+         $concatenatedString .= $transaction['trans_recurringType'];
+      }
+
+      if (isset($transaction['trans_recurring1'])) {
+         $concatenatedString .= $transaction['trans_recurring1'];
+      }
+
+      $concatenatedString .= $this->hashCode;
 
       return urlencode(base64_encode(hash("sha256", $concatenatedString, true)));
    }
@@ -82,17 +98,19 @@ class Adapter {
       $redirectUrl .= '&trans_currency=' . $transaction['trans_currency'];
       $redirectUrl .= '&trans_type=' . $transaction['trans_type'];
       $redirectUrl .= '&disp_paymentType=' . $transaction['disp_paymentType'];
-      $redirectUrl .= '&notification_url=' . urlencode($transaction['notification_url']);
       $redirectUrl .= '&url_redirect=' . urlencode($transaction['url_redirect']);
       $redirectUrl .= '&client_fullName=' . $transaction['client_fullName'];
       $redirectUrl .= '&disp_payFor=' . $transaction['disp_payFor'];
       $redirectUrl .= '&trans_comment=' . $transaction['trans_comment'];
 
+      if (isset($transaction['notification_url'])) {
+         $redirectUrl .= '&notification_url=' . urlencode($transaction['notification_url']);
+      }
+
       if (isset($transaction['trans_recurringType'])) {
          $redirectUrl .= '&disp_recurring=' . $transaction['disp_recurring'];
          $redirectUrl .= '&trans_recurringType=' . $transaction['trans_recurringType'];
          $redirectUrl .= '&trans_recurring1=' . $transaction['trans_recurring1'];
-
       }
 
       $redirectUrl .= '&signature=' . $transaction['signature'];
