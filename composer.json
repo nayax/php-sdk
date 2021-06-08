@@ -1,5 +1,6 @@
 {
    "name": "nayax/php-sdk",
+   "version": "1.0",
    "description": "Nayax API integration via php",
    "type": "library",
    "authors": [
