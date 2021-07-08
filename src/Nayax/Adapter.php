@@ -37,6 +37,10 @@ class Adapter {
          'trans_comment' => $transaction['description'],
       ];
 
+      if ($transaction['saveCard'] === true) {
+         $transactionDetails['trans_storePm'] = 1;
+      }
+
       if ($paymentType === self::RECURRING_PAYMENT) {
          $transactionDetails['disp_recurring'] = 1;
          $transactionDetails['trans_recurringType'] = 0;
@@ -65,6 +69,10 @@ class Adapter {
          $transaction['client_fullName'] .
          $transaction['disp_payFor'] .
          $transaction['trans_comment'];
+
+      if (isset($transaction['trans_storePm'])) {
+         $concatenatedString .= $transaction['trans_storePm'];
+      }
 
       if (isset($transaction['notification_url'])) {
          $concatenatedString .= $transaction['notification_url'];
@@ -102,6 +110,10 @@ class Adapter {
       $redirectUrl .= '&client_fullName=' . $transaction['client_fullName'];
       $redirectUrl .= '&disp_payFor=' . $transaction['disp_payFor'];
       $redirectUrl .= '&trans_comment=' . $transaction['trans_comment'];
+
+      if (isset($transaction['trans_storePm'])) {
+         $redirectUrl .= '&trans_storePm=' . urlencode($transaction['trans_storePm']);
+      }
 
       if (isset($transaction['notification_url'])) {
          $redirectUrl .= '&notification_url=' . urlencode($transaction['notification_url']);
