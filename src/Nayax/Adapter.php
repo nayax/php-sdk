@@ -34,8 +34,12 @@ class Adapter {
          'url_redirect' => $transaction['redirectUrl'],
          'client_fullName' => $transaction['name'],
          'disp_payFor' => $transaction['description'],
-         'trans_comment' => $transaction['description'],
+         'trans_comment' => $transaction['description']
       ];
+
+      if (isset($transaction['language'])) {
+         $transactionDetails['disp_lng'] = $transaction['language'];
+      }
 
       if ($transaction['saveCard'] === true) {
          $transactionDetails['trans_storePm'] = 1;
@@ -69,6 +73,10 @@ class Adapter {
          $transaction['client_fullName'] .
          $transaction['disp_payFor'] .
          $transaction['trans_comment'];
+
+      if (isset($transaction['disp_lng'])) {
+         $concatenatedString .= $transaction['disp_lng'];
+      }
 
       if (isset($transaction['trans_storePm'])) {
          $concatenatedString .= $transaction['trans_storePm'];
@@ -111,8 +119,12 @@ class Adapter {
       $redirectUrl .= '&disp_payFor=' . $transaction['disp_payFor'];
       $redirectUrl .= '&trans_comment=' . $transaction['trans_comment'];
 
+      if (isset($transaction['disp_lng'])) {
+         $redirectUrl .= '&disp_lng=' . $transaction['disp_lng'];
+      }
+
       if (isset($transaction['trans_storePm'])) {
-         $redirectUrl .= '&trans_storePm=' . urlencode($transaction['trans_storePm']);
+         $redirectUrl .= '&trans_storePm=' . $transaction['trans_storePm'];
       }
 
       if (isset($transaction['notification_url'])) {
